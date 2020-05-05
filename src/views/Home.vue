@@ -5,7 +5,7 @@
     <div class="container">
       <div class="row">
         <div class="col-12 tableCol d-flex justify-content-center">
-          <table v-if="myTasks.lenght>0" class="table table-bordered">
+          <table v-if="outputTasks.lenght!==0" class="table table-bordered">
             <thead>
               <tr>
                 <!-- <th scope="col">#</th> -->
@@ -26,7 +26,7 @@
                 <td v-if="todo.status==`nDone`">
                   <button class="btn btn-primary table text-center" @click="doTodo(todo.id)">done</button>
                 </td>
-                <td v-esle>
+                <td v-if="todo.status=='done'">
                   <button class="btn btn-primary table text-center" @click="undoTodo(todo.id)">Undo</button>
                 </td>
                 <td>
@@ -54,7 +54,7 @@
             data-target="#addTaskModal"
           >
             <span></span>
-            Add User
+            Add Task
           </button>
         </div>
       </div>
@@ -139,8 +139,8 @@ export default {
       });
     }
 
-    this.getTasksFromStore;
-    this.updatedOutput;
+    this.getTasksFromStore();
+    this.updatedOutput();
   },
 
   computed: {
@@ -164,7 +164,7 @@ export default {
       this.$store.commit("SET_TASKS", {
         myTasks: this.myTasks
       });
-      this.updatedOutput;
+      this.updatedOutput();
     },
     undoTodo(id) {
       for (const todo of this.myTasks) {
@@ -176,7 +176,7 @@ export default {
       this.$store.commit("SET_TASKS", {
         myTasks: this.myTasks
       });
-      this.updatedOutput;
+      this.updatedOutput();
     },
 
     addTask() {
@@ -192,7 +192,19 @@ export default {
       this.$store.commit("SET_TASKS", {
         myTasks: this.myTasks
       });
-      this.updatedOutput;
+      this.updatedOutput();
+
+      // $(function() {
+      //   $("#modal").modal("toggle");
+      // });
+    },
+    deleteTodo(id) {
+      this.myTasks = this.myTasks.filter(todo => todo.id !== id);
+
+      this.$store.commit("SET_TASKS", {
+        myTasks: this.myTasks
+      });
+      this.updatedOutput();
     }
   }
 };
